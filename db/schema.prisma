@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model users {
+  id             String   @id @default(cuid())
+  name           String
+  email          String   @unique
+  password_hash  String
+  created_at     DateTime @default(now())
+  favorites      user_favorites[]
+  progress       user_progress[]
+}
+
+model themes {
+  id          String          @id @default(cuid())
+  slug        String          @unique
+  name        String
+  description String
+  videos      video_themes[]
+}
+
+model videos {
+  id                        String   @id @default(cuid())
+  slug                      String   @unique
+  title                     String
+  description               String
+  duration_seconds          Int
+  level                     String
+  thumbnail_url             String
+  media_url                 String
+  is_hls                    Boolean  @default(false)
+  preview_start_seconds     Int      @default(0)
+  preview_duration_seconds  Int      @default(20)
+  created_at                DateTime @default(now())
+  published                 Boolean  @default(true)
+  materials                 materials[]
+  themes                    video_themes[]
+  favorites                 user_favorites[]
+  progress                  user_progress[]
+}
+
+model video_themes {
+  video_id String
+  theme_id String
+  video    videos @relation(fields: [video_id], references: [id])
+  theme    themes @relation(fields: [theme_id], references: [id])
+
+  @@id([video_id, theme_id])
+}
+
+model materials {
+  id       String @id @default(cuid())
+  video_id String
+  type     String
+  title    String
+  url      String
+  video    videos @relation(fields: [video_id], references: [id])
+}
+
+model user_favorites {
+  user_id    String
+  video_id   String
+  created_at DateTime @default(now())
+  user       users   @relation(fields: [user_id], references: [id])
+  video      videos  @relation(fields: [video_id], references: [id])
+
+  @@id([user_id, video_id])
+}
+
+model user_progress {
+  user_id               String
+  video_id              String
+  last_position_seconds Int      @default(0)
+  completed             Boolean  @default(false)
+  updated_at            DateTime @default(now()) @updatedAt
+  user                  users    @relation(fields: [user_id], references: [id])
+  video                 videos   @relation(fields: [video_id], references: [id])
+
+  @@id([user_id, video_id])
+}

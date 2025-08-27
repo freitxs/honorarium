@@ -1,0 +1,17 @@
+:root {
+  --bg: #0B0B0F;
+  --bg-grad-start: #0B0B0F;
+  --bg-grad-end: #121218;
+  --primary: #D4AF37;
+  --primary-600: #B8902E;
+  --primary-300: #E6C766;
+  --text: #EAEAEA;
+  --muted: #9AA3AF;
+  --card: #111216;
+  --border: #1E1F25;
+  --accent: #C7A977;
+  --success: #2ECC71;
+  --warning: #F1C40F;
+  --error: #E74C3C;
+  --shadow-color: 0 10px 30px rgba(0,0,0,.35);
+}

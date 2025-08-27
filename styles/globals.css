@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+html, body {
+  height: 100%;
+  background:
+    radial-gradient(1200px 600px at 70% -10%, rgba(212,175,55,0.12), transparent 60%),
+    linear-gradient(180deg, var(--bg-grad-start), var(--bg-grad-end));
+  color: var(--text);
+}
+.container { @apply max-w-6xl mx-auto px-4; }
+.text-muted { color: var(--muted); }
+.bg-card { background: var(--card); }
+.border-default { border-color: var(--border); }
+a { color: var(--primary-300); } a:hover { color: var(--primary); }
+
+.btn {
+  @apply inline-flex items-center justify-center rounded-2xl px-4 py-2 font-medium transition-transform;
+  background: linear-gradient(180deg, var(--primary-300), var(--primary));
+  color: #0b0b0f; position: relative; overflow: hidden;
+  box-shadow: 0 8px 24px rgba(212,175,55,0.2);
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.ripple { position: absolute; border-radius: 50%; transform: scale(0); animation: ripple 600ms linear; background-color: rgba(255,255,255,0.4); }
+@keyframes ripple { to { transform: scale(4); opacity: 0; } }
+.skeleton { @apply animate-pulse rounded-xl bg-neutral-800; }
