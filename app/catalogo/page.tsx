@@ -4,11 +4,10 @@ import { prisma } from "@/lib/prisma";
 export default async function CatalogPage({ searchParams }: { searchParams: Record<string, string> }) {
   const q = searchParams["q"] || undefined;
   const videos = await prisma.videos.findMany({
-  where: { published: true, ...(q ? { title: { contains: q } } : {}) },
-  orderBy: { created_at: "desc" },
-  select: { slug: true, title: true, thumbnail_url: true, media_url: true }
-});
-
+    where: { published: true, ...(q ? { title: { contains: q, mode: "insensitive" } } : {}) },
+    orderBy: { created_at: "desc" },
+    select: { slug: true, title: true, thumbnail_url: true, media_url: true }
+  });
 
   return (
     <div className="container py-8">
