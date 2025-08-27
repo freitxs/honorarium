@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import type { Route } from "next";
 
 type Item = {
   slug: string;
@@ -10,14 +11,27 @@ type Item = {
 
 export default function Carousel({ items }: { items: Item[] }) {
   const [idx, setIdx] = useState(0);
-  const timer = useRef<NodeJS.Timeout | null>(null);
+  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    timer.current && clearInterval(timer.current);
+    // limpa intervalo anterior, se houver
+    if (timer.current) {
+      clearInterval(timer.current);
+      timer.current = null;
+    }
+
+    // cria novo intervalo
     timer.current = setInterval(() => {
       setIdx((i) => (i + 1) % Math.max(items.length, 1));
     }, 4000);
-    return () => timer.current && clearInterval(timer.current);
+
+    // cleanup (sempre retorna void)
+    return () => {
+      if (timer.current) {
+        clearInterval(timer.current);
+        timer.current = null;
+      }
+    };
   }, [items.length]);
 
   if (!items.length) return null;
@@ -27,7 +41,7 @@ export default function Carousel({ items }: { items: Item[] }) {
   return (
     <div className="rounded-2xl overflow-hidden border border-default">
       <Link
-        href={{ pathname: "/video/[slug]", query: { slug: it.slug } }} // ✅ typedRoutes ok
+        href={{ pathname: "/video/[slug]" as Route, query: { slug: it.slug } }}
         className="relative block aspect-[16/7] bg-card"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -41,6 +55,7 @@ export default function Carousel({ items }: { items: Item[] }) {
           <h3 className="text-xl font-semibold">{it.title}</h3>
         </div>
       </Link>
+
       <div className="flex gap-2 p-3">
         {items.map((_, i) => (
           <button
