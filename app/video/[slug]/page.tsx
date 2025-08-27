@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
 import VideoWithActions from "@/components/VideoWithActions";
 import { getUserFromCookie } from "@/lib/auth";
