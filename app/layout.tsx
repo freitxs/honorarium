@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+
+
 import "../styles/globals.css";
 import "../styles/tokens.css";
 import Header from "@/components/Header";
