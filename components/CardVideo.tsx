@@ -19,7 +19,7 @@ export default function CardVideo({
 
   return (
     <Link
-      href={{ pathname: "/video/[slug]", query: { slug } }} // ✅ object form evita erro do typedRoutes
+      href={`/video/${slug}`}
       className="group block bg-card border border-default rounded-2xl overflow-hidden"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
@@ -36,7 +36,7 @@ export default function CardVideo({
             className="absolute inset-0 w-full h-full object-cover"
           />
         ) : (
-          // eslint-disable-next-line @next/next/no-img-element
+          
           <img
             src={thumbnail_url}
             alt={title}

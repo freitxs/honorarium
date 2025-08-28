@@ -41,7 +41,7 @@ export default function Carousel({ items }: { items: Item[] }) {
   return (
     <div className="rounded-2xl overflow-hidden border border-default">
       <Link
-        href={{ pathname: "/video/[slug]" as Route, query: { slug: it.slug } }}
+        href={`/video/${it.slug}`}
         className="relative block aspect-[16/7] bg-card"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}

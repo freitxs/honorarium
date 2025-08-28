@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import type { Route } from "next";
 import Carousel from "@/components/Carousel";
@@ -34,3 +35,4 @@ export default async function HomePage() {
     </div>
   );
 }
+
