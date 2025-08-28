@@ -1,31 +1,51 @@
 export const dynamic = "force-dynamic";
 
-
 import { prisma } from "@/lib/prisma";
 import CardVideo from "@/components/CardVideo";
 
-export default async function CatalogThemePage({ params, searchParams }: { params: { tema: string }, searchParams: Record<string,string> }) {
-  const order = searchParams["ord"] || "novos";
-  const theme = await prisma.themes.findUnique({ where: { slug: params.tema } });
-  const orderBy = order === "duracao" ? { duration_seconds: "asc" as const } : { created_at: "desc" as const };
+export default async function CatalogTemaPage({
+  params,
+}: {
+  params: { tema: string };
+}) {
+  const tema = params.tema?.toLowerCase();
 
-  const vts = await prisma.video_themes.findMany({ where: { theme_id: theme?.id } });
-  const ids = vts.map(v => v.video_id);
-  const videos = await prisma.videos.findMany({ where: { id: { in: ids }, published: true }, orderBy, select: { slug: true, title: true, thumbnail_url: true, media_url: true } });
+  const where =
+    tema === "fundamentos"
+      ? { published: true, title: { contains: "Fundamentos" } }
+      : {
+          published: true,
+          OR: [
+            { title: { contains: tema } },
+            { description: { contains: tema } },
+          ],
+        };
+
+  const videos = await prisma.videos.findMany({
+    where,
+    orderBy: { created_at: "desc" },
+    select: { slug: true, title: true, thumbnail_url: true, media_url: true },
+  });
 
   return (
     <div className="container py-8">
-      <h1 className="text-3xl font-bold mb-4">{theme?.name || "Tema"}</h1>
-      <form className="mb-4 flex gap-3 items-center">
-        <label>Ordenar:</label>
-        <select name="ord" defaultValue={order} className="bg-card border border-default rounded-xl px-2 py-1">
-          <option value="novos">Mais novos</option>
-          <option value="duracao">Duração</option>
-        </select>
-        <button className="btn">Aplicar</button>
-      </form>
+      <h1 className="text-3xl font-bold mb-4">
+        {tema === "fundamentos" ? "Fundamentos" : `Tema: ${params.tema}`}
+      </h1>
+
       <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {videos.map(v => (<CardVideo key={v.slug} slug={v.slug} title={v.title} thumbnail_url={v.thumbnail_url} preview_url={v.media_url} />))}
+        {videos.map((v) => (
+          <CardVideo
+            key={v.slug}
+            slug={v.slug}
+            title={v.title}
+            thumbnail_url={v.thumbnail_url}
+            preview_url={v.media_url}
+          />
+        ))}
+        {videos.length === 0 && (
+          <p className="text-muted">Nenhum vídeo encontrado.</p>
+        )}
       </div>
     </div>
   );

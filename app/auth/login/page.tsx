@@ -50,9 +50,7 @@ export default function LoginPage() {
           {error && <p className="text-[var(--error)]">{error}</p>}
           <button type="submit" className="btn">Entrar</button>
         </form>
-        <p className="text-muted text-sm mt-4">
-          Não tem conta? <a href="/auth/cadastro">Cadastre-se</a>
-        </p>
+        
       </div>
     </div>
   );
