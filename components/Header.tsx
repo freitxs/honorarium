@@ -3,9 +3,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { useState } from "react";
-import type { Route } from "next";
+import { useMounted } from "@/lib/useMounted";   // ⬅️ novo
 
-const links: { href: Route; label: string }[] = [
+const links = [
   { href: "/", label: "Início" },
   { href: "/catalogo", label: "Catálogo" },
   { href: "/meus-conteudos", label: "Meus Conteúdos" },
@@ -16,11 +16,13 @@ const links: { href: Route; label: string }[] = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const mounted = useMounted();                // ⬅️ novo
+  if (!mounted) return null;                   // ⬅️ evita mismatch na hidratação
 
   return (
     <header className="sticky top-0 z-40 border-b border-default/50 bg-black/30 backdrop-blur">
       <div className="container flex items-center justify-between h-16">
-        <Link href={"/" as Route} className="font-bold tracking-wide text-xl">
+        <Link href="/" className="font-bold tracking-wide text-xl">
           <span className="text-[var(--primary)]">Honor</span>arium
         </Link>
 
@@ -36,9 +38,7 @@ export default function Header() {
               {l.label}
             </Link>
           ))}
-          <Link href={"/auth/login" as Route} className="btn">
-            Entrar
-          </Link>
+          <Link href="/auth/login" className="btn">Entrar</Link>
         </nav>
 
         <button className="md:hidden p-2" onClick={() => setOpen((v) => !v)}>
@@ -59,11 +59,7 @@ export default function Header() {
                 {l.label}
               </Link>
             ))}
-            <Link
-              href={"/auth/login" as Route}
-              className="btn mt-2 w-fit"
-              onClick={() => setOpen(false)}
-            >
+            <Link href="/auth/login" className="btn mt-2 w-fit" onClick={() => setOpen(false)}>
               Entrar
             </Link>
           </div>

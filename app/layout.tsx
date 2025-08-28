@@ -19,7 +19,6 @@ import ClientLayout from "@/components/ClientLayout";
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      import ToastProvider from '@/components/ToastProvider';
 
 <body className="min-h-screen flex flex-col">
         <Header />
