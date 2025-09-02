@@ -9,7 +9,7 @@ import { prisma } from "@/lib/prisma";
 import CardVideo from "@/components/CardVideo";
 import HomeProgress from "@/components/HomeProgress";
 import Testimonials from "@/components/Testimonials";
-
+  
 export default async function HomePage() {
   // total para a barra de progresso
   const totalCount = await prisma.videos.count({ where: { published: true } });
